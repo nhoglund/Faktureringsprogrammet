@@ -1,0 +1,17 @@
+Fakturering/bin
+FaktureringTest/bin
+Fakturering.suo
+Fakturering/Fakturering.csproj.user
+Fakturering/obj
+PrintInv/printInv.exe
+Fakturering.userprefs
+Fakturering.usertasks
+Fakturering/Fakturering.pidb
+FaktureringTest/FaktureringTest.pidb
+*~
+
+.hg
+.hgignore
+.hgtags
+*.exe
+Fakturering/Fakturering_TemporaryKey.pfx

@@ -1,0 +1,13 @@
+<Combine name="FaktureringTest" fileversion="2.0">
+  <Configurations active="Default">
+    <Configuration name="Default" ctype="CombineConfiguration">
+      <Entry build="True" name="FaktureringTest" configuration="Default" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="FaktureringTest" single="True">
+    <Execute type="None" entry="FaktureringTest" />
+  </StartMode>
+  <Entries>
+    <Entry filename="FaktureringTest.md-nunit" />
+  </Entries>
+</Combine>
