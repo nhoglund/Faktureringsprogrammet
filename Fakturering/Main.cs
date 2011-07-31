@@ -1,5 +1,5 @@
-using System;
 using Gtk;
+using System;
 
 namespace Fakturering
 {
@@ -11,10 +11,10 @@ namespace Fakturering
             {
                 InvoiceDirectory idir = new InvoiceDirectory();
 
-                Application.Init();
+                Gtk.Application.Init();
                 MainWindow win = new MainWindow(idir);
                 win.Show();
-                Application.Run();
+                Gtk.Application.Run();
             }
             catch (System.Exception e)
             {

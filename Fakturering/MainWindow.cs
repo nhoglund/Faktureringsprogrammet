@@ -1,5 +1,6 @@
 using System;
 using Gtk;
+using System.Drawing.Printing;
 
 namespace Fakturering
 {
@@ -16,7 +17,6 @@ namespace Fakturering
 		Button edit;
 		Button delete;
 		Button showbut;
-		Button printbut;
 
 		private void CreateListView()
 		{
@@ -46,8 +46,7 @@ namespace Fakturering
 			create   = Button.NewWithLabel("Skapa ny faktura");
 			edit     = Button.NewWithLabel("Redigera faktura");
 			delete   = Button.NewWithLabel("Radera faktura");
-			showbut  = Button.NewWithLabel("Visa faktura");
-			printbut = Button.NewWithLabel("Skriv ut faktura");
+			showbut  = Button.NewWithLabel("Visa/skriv ut faktura");
 			
 			CreateListView();
 
@@ -58,7 +57,6 @@ namespace Fakturering
 			buttons.PackStart(create,   false, false, 0);
 			buttons.PackStart(edit,     false, false, 0);
 			buttons.PackStart(showbut,  false, false, 0);
-			buttons.PackStart(printbut, false, false, 0);
 			buttons.PackStart(delete,   false, false, 0);
 			scrolledhd.AddWithViewport(listview);
 			scrolledhd.SetPolicy(PolicyType.Automatic, PolicyType.Automatic);
@@ -69,7 +67,6 @@ namespace Fakturering
 			edit.Clicked     += new EventHandler(Edit);
 			delete.Clicked   += new EventHandler(DeleteInvoice);
 			showbut.Clicked  += new EventHandler(ShowInvoice);
-			printbut.Clicked += new EventHandler(PrintInvoice);
 
 			maingroup.ShowAll();
 
@@ -174,32 +171,25 @@ namespace Fakturering
 		{
             try
             {
-                string inv;
-                if (SelectedInvoice(out inv))
+                string name;
+                if (SelectedInvoice(out name))
                 {
-                    System.Diagnostics.Process.Start("printInv-2.0.exe", "SHOW \"" + idir.PathName(inv) + "\"");
-                }
-            }
-            catch (Exception e)
-            {
-                MessageDialog(e.Message);
-            }
-		}
+                    Invoice invoice = new Invoice();
+                    string file = idir.PathName(name);
+                    invoice.load(file);
 
-		private void PrintInvoice(object sender, EventArgs args)
-		{
-            try
-            {
-                string inv;
-                if (SelectedInvoice(out inv))
-                {
-                    System.Diagnostics.Process.Start("printInv-2.0.exe", "PRINT \"" + idir.PathName(inv) + "\"");
+					PrintInvoice printDoc = new PrintInvoice(invoice);
+					System.Windows.Forms.PrintPreviewDialog dlgPrintPreview = new System.Windows.Forms.PrintPreviewDialog();
+					dlgPrintPreview.Document = printDoc;
+					dlgPrintPreview.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+					dlgPrintPreview.ShowDialog();
                 }
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
-                MessageDialog(e.Message);
-            }
+                MessageDialog("Error in " + e.TargetSite +
+                              ": " + e.Message);
+			}
 		}
 
 		// Den här måste anropas efter att fönstret visats

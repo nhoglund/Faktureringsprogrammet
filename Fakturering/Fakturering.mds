@@ -1,0 +1,16 @@
+<Combine fileversion="2.0">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="Fakturering" configuration="Debug" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="Fakturering" configuration="Release" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="Fakturering" single="True">
+    <Execute type="None" entry="Fakturering" />
+  </StartMode>
+  <Entries>
+    <Entry filename="Fakturering.mdp" />
+  </Entries>
+</Combine>

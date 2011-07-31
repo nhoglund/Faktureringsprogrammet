@@ -138,5 +138,33 @@ namespace Fakturering
 			}
 			stream.Close();
 		}
+		public double OavrundadSumma()
+		{
+			double sum = 0.0;
+			for (uint i=0; i<specs.Length; i++)
+				sum += specs[i].GetAmount();
+			return sum;
+		}
+		
+		public double Avrundning()
+		{
+			double sum = OavrundadSumma();
+			return Math.Floor(sum/4.0) * 4.0 - sum;
+		}
+		
+		public double Summa()
+		{
+			return OavrundadSumma() + Avrundning();
+		}
+		
+		public double Moms()
+		{
+			return 0.25 * Summa();
+		}
+		
+		public double AttBetala()
+		{
+			return Summa() + Moms();
+		}
 	}
 }
