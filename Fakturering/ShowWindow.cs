@@ -6,11 +6,14 @@ namespace Fakturering
 {
 	public class ShowWindow : Form
 	{
-		public ShowWindow()
+		Invoice invoice;
+
+		public ShowWindow(Invoice inv)
 		{
 			Text = "Förhandsgranskning - Faktura";
 			Width = 561;
 			Height = 770;
+			invoice = inv;
 
 			Paint += DrawInvoice;
 		}
@@ -18,9 +21,9 @@ namespace Fakturering
 		private void DrawInvoice(object sender, PaintEventArgs args)
 		{
 			Graphics g = args.Graphics;
-			g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			//g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 			g.Clear(Color.White);
-			g.DrawEllipse(new Pen(Color.Black), 100, 100, 100, 100);
+			invoice.Draw(g, ClientSize.Width, ClientSize.Height, false);
 		}
 	}
 }

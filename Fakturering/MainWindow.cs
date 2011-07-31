@@ -17,6 +17,7 @@ namespace Fakturering
 		Button edit;
 		Button delete;
 		Button showbut;
+		Button printbut;
 
 		private void CreateListView()
 		{
@@ -38,7 +39,7 @@ namespace Fakturering
 			idir = idir_;
 
 			SetSizeRequest(500, 500);
-			Title = "Fakturering 2.4";
+			Title = "Fakturering 2.6";
 
 			maingroup = new HBox(false, 0);
 			buttons = new VButtonBox();
@@ -46,7 +47,8 @@ namespace Fakturering
 			create   = Button.NewWithLabel("Skapa ny faktura");
 			edit     = Button.NewWithLabel("Redigera faktura");
 			delete   = Button.NewWithLabel("Radera faktura");
-			showbut  = Button.NewWithLabel("Visa/skriv ut faktura");
+			showbut  = Button.NewWithLabel("Visa faktura");
+			printbut = Button.NewWithLabel("Skriv ut faktura");
 			
 			CreateListView();
 
@@ -57,6 +59,7 @@ namespace Fakturering
 			buttons.PackStart(create,   false, false, 0);
 			buttons.PackStart(edit,     false, false, 0);
 			buttons.PackStart(showbut,  false, false, 0);
+			buttons.PackStart(printbut, false, false, 0);
 			buttons.PackStart(delete,   false, false, 0);
 			scrolledhd.AddWithViewport(listview);
 			scrolledhd.SetPolicy(PolicyType.Automatic, PolicyType.Automatic);
@@ -67,6 +70,7 @@ namespace Fakturering
 			edit.Clicked     += new EventHandler(Edit);
 			delete.Clicked   += new EventHandler(DeleteInvoice);
 			showbut.Clicked  += new EventHandler(ShowInvoice);
+			printbut.Clicked += new EventHandler(PrintInvoice);
 
 			maingroup.ShowAll();
 
@@ -177,12 +181,46 @@ namespace Fakturering
                     Invoice invoice = new Invoice();
                     string file = idir.PathName(name);
                     invoice.load(file);
+					ShowWindow sw = new ShowWindow(invoice);
+					sw.Show();
+
+//					PrintInvoice printDoc = new PrintInvoice(invoice);
+//					System.Windows.Forms.PrintPreviewDialog dlgPrintPreview = new System.Windows.Forms.PrintPreviewDialog();
+//					dlgPrintPreview.Document = printDoc;
+//					dlgPrintPreview.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+//					dlgPrintPreview.ShowDialog();
+                }
+            }
+            catch (System.Exception e)
+            {
+                MessageDialog("Error in " + e.TargetSite +
+                              ": " + e.Message);
+			}
+		}
+
+		private void PrintInvoice(object sender, EventArgs args)
+		{
+            try
+            {
+                string name;
+                if (SelectedInvoice(out name))
+                {
+                    Invoice invoice = new Invoice();
+                    string file = idir.PathName(name);
+                    invoice.load(file);
 
 					PrintInvoice printDoc = new PrintInvoice(invoice);
-					System.Windows.Forms.PrintPreviewDialog dlgPrintPreview = new System.Windows.Forms.PrintPreviewDialog();
-					dlgPrintPreview.Document = printDoc;
-					dlgPrintPreview.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-					dlgPrintPreview.ShowDialog();
+					System.Windows.Forms.PrintDialog dlg = new System.Windows.Forms.PrintDialog();
+					dlg.AllowSomePages = true;
+					dlg.ShowHelp = true;
+					dlg.Document = printDoc;
+					dlg.PrinterSettings.MinimumPage = 1;
+					dlg.PrinterSettings.MaximumPage = 2;
+					dlg.PrinterSettings.FromPage = 1;
+					dlg.PrinterSettings.ToPage = 2;
+					if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+						printDoc.Print();
+					}
                 }
             }
             catch (System.Exception e)
